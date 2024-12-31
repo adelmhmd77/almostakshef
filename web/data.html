@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البيانات المسجلة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .icon {
+            cursor: pointer;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>البيانات المسجلة</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>الاسم الكامل</th>
+                    <th>العمر</th>
+                    <th>رقم الهاتف</th>
+                    <th>رمز الدخول</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody id="userTable">
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Check if the admin is logged in
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        // Function to load and display users' data from localStorage
+        function loadUserData() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userTable = document.getElementById('userTable');
+
+            if (users.length > 0) {
+                users.forEach((user, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.name}</td>
+                        <td>${user.age}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.code}</td>
+                        <td>
+                            <span class="icon" onclick="editUser(${index})"><i class="fas fa-edit"></i> تعديل</span>
+                            <span class="icon" onclick="deleteUser(${index})"><i class="fas fa-trash-alt"></i> حذف</span>
+                        </td>
+                    `;
+                    userTable.appendChild(row);
+                });
+            } else {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="5" class="text-center">لا توجد بيانات لتعرضها</td>`;
+                userTable.appendChild(row);
+            }
+        }
+
+        // Edit user function
+        function editUser(index) {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const user = users[index];
+            const newName = prompt('تعديل الاسم الكامل:', user.name);
+            const newAge = prompt('تعديل العمر:', user.age);
+            const newPhone = prompt('تعديل رقم الهاتف:', user.phone);
+
+            if (newName && newAge && newPhone) {
+                user.name = newName;
+                user.age = newAge;
+                user.phone = newPhone;
+                localStorage.setItem('users', JSON.stringify(users));
+                location.reload();  // Reload to update the table
+            }
+        }
+
+        // Delete user function
+        function deleteUser(index) {
+            const users = JSON.parse(localStorage.getItem('users'));
+            if (confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
+                users.splice(index, 1);
+                localStorage.setItem('users', JSON.stringify(users));
+                location.reload();  // Reload to update the table
+            }
+        }
+
+        // Call the function when the page loads
+        window.onload = loadUserData;
+    </script>
+
+</body>
+</html>
