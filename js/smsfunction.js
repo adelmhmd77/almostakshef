@@ -1,50 +1,50 @@
-        // Function to generate a random code
-        function generateCode() {
-            return Math.floor(1000 + Math.random() * 9000);
-        }
+// وظيفة لتوليد كود عشوائي
+function generateCode() {
+    return Math.floor(1000 + Math.random() * 9000);
+}
 
-        // Event listener for form submission
-        document.getElementById('registrationForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form from submitting in the usual way
+// مستمع حدث عند إرسال النموذج
+document.getElementById('registrationForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // منع النموذج من الإرسال بالطريقة المعتادة
 
-            // Get form data
-            const name = document.getElementById('rname').value;
-            const age = document.getElementById('rage').value;
-            const phone = document.getElementById('rphone').value;
+    // الحصول على بيانات النموذج
+    const name = document.getElementById('rname').value;
+    const age = document.getElementById('rage').value;
+    const phone = document.getElementById('rphone').value;
 
-            // Check if user already exists in localStorage
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-            let existingUser = users.find(user => user.phone === phone);
+    // التحقق إذا كان المستخدم موجودًا بالفعل في localStorage
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    let existingUser = users.find(user => user.phone === phone);
 
-            if (existingUser) {
-                // If the user exists, just show their code
-                alert(`Welcome back! Your code is: ${existingUser.code}`);
-            } else {
-                // If the user doesn't exist, generate a new code
-                const code = generateCode();
+    if (existingUser) {
+        // إذا كان المستخدم موجودًا، عرض الكود الخاص به
+        alert(`مرحبًا ${existingUser.name}!\nالكود الخاص بك هو: ${existingUser.code}.\nيرجى الاحتفاظ بالكود في مكان آمن لتتمكن من الانضمام إلى الدورة. `);
+    } else {
+        // إذا لم يكن المستخدم موجودًا، توليد كود جديد
+        const code = generateCode();
 
-                // Store user data in localStorage
-                const userData = {
-                    name: name,
-                    age: age,
-                    phone: phone,
-                    code: code
-                };
+        // تخزين بيانات المستخدم في localStorage
+        const userData = {
+            name: name,
+            age: age,
+            phone: phone,
+            code: code
+        };
 
-                // Add the new user to the users array
-                users.push(userData);
+        // إضافة المستخدم الجديد إلى مصفوفة المستخدمين
+        users.push(userData);
 
-                // Save the updated users array back to localStorage
-                localStorage.setItem('users', JSON.stringify(users));
+        // حفظ المصفوفة المحدثة في localStorage
+        localStorage.setItem('users', JSON.stringify(users));
 
-                // Show success message
-                alert(`Thank you for joining! Your unique code is: ${code}`);
-            }
+        // عرض رسالة النجاح
+        alert(`مرحبًا ${name}!\nشكرًا لانضمامك!\nالكود الخاص بك هو: ${code}.\nيرجى الاحتفاظ بالكود في مكان آمن لتتمكن من الانضمام إلى الدورة. `);
+    }
 
-            // Show success message
-            document.getElementById('successMessage').classList.remove('hidden');
-            document.getElementById('errorMessage').classList.add('hidden');
+    // عرض رسالة النجاح
+    document.getElementById('successMessage').classList.remove('hidden');
+    document.getElementById('errorMessage').classList.add('hidden');
 
-            // Optionally, reset the form
-            document.getElementById('registrationForm').reset();
-        });
+    // إعادة تعيين النموذج إذا لزم الأمر
+    document.getElementById('registrationForm').reset();
+});
