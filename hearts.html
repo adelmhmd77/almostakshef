@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>البيانات المسجلة</title>
+    <title>Hearts</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -58,12 +58,12 @@
             text-align: left;
             border: 1px solid #ddd;
         }
+        td {
+            color: white;
+        }
         th {
             background-color: #f2f2f2;
             color: black;
-        }
-        td {
-            color: white;
         }
         .container {
             width: 100%;
@@ -76,13 +76,14 @@
         .container h2 {
             color: white;
         }
-        .icon {
+        .heart {
             cursor: pointer;
-            margin-right: 10px;
-            color: white;
-        }
-        .icon:hover {
+            font-size: 1.2em;
             color: red;
+            margin-left: 5px;
+        }
+        .heart.black {
+            color: black;
         }
     </style>
 </head>
@@ -105,10 +106,8 @@
                     <thead>
                         <tr>
                             <th>الاسم الكامل</th>
-                            <th>العمر</th>
-                            <th>رقم الهاتف</th>
                             <th>رمز الدخول</th>
-                            <th>الإجراءات</th>
+                            <th>الارواح</th>
                         </tr>
                     </thead>
                     <tbody id="userTable">
@@ -128,55 +127,58 @@
         // Function to load and display users' data from localStorage
         function loadUserData() {
             const users = JSON.parse(localStorage.getItem('users')) || [];
+            const likesData = JSON.parse(localStorage.getItem('likesData')) || {};
             const userTable = document.getElementById('userTable');
 
             if (users.length > 0) {
                 users.forEach((user, index) => {
+                    const hearts = likesData[user.code] || [true, true, true, true, true]; // Default 5 red hearts
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${user.name}</td>
-                        <td>${user.age}</td>
-                        <td>${user.phone}</td>
                         <td>${user.code}</td>
-                        <td>
-                            <span class="icon" onclick="editUser(${index})"><i class="fas fa-edit"></i> تعديل</span>
-                            <span class="icon" onclick="deleteUser(${index})"><i class="fas fa-trash-alt"></i> حذف</span>
+                        <td>${hearts
+                            .map((isRed, i) =>
+                                `<i class="fas fa-heart heart ${isRed ? '' : 'black'}" data-user-index="${index}" data-heart-index="${i}"></i>`
+                            )
+                            .join('')}
                         </td>
                     `;
                     userTable.appendChild(row);
                 });
+
+                // Add event listeners to hearts
+                document.querySelectorAll('.heart').forEach(heart => {
+                    heart.addEventListener('click', toggleHeartColor);
+                });
             } else {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="5" class="text-center">لا توجد بيانات لتعرضها</td>`;
+                row.innerHTML = `<td colspan="3" class="text-center">لا توجد بيانات لتعرضها</td>`;
                 userTable.appendChild(row);
             }
         }
 
-        // Edit user function
-        function editUser(index) {
-            const users = JSON.parse(localStorage.getItem('users'));
-            const user = users[index];
-            const newName = prompt('تعديل الاسم الكامل:', user.name);
-            const newAge = prompt('تعديل العمر:', user.age);
-            const newPhone = prompt('تعديل رقم الهاتف:', user.phone);
+        // Toggle heart color and save state to localStorage
+        function toggleHeartColor(event) {
+            const heart = event.target;
+            const userIndex = heart.getAttribute('data-user-index');
+            const heartIndex = heart.getAttribute('data-heart-index');
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users[userIndex];
+            const likesData = JSON.parse(localStorage.getItem('likesData')) || {};
 
-            if (newName && newAge && newPhone) {
-                user.name = newName;
-                user.age = newAge;
-                user.phone = newPhone;
-                localStorage.setItem('users', JSON.stringify(users));
-                location.reload();  // Reload to update the table
-            }
-        }
+            // Get the user's likes or initialize them
+            const userLikes = likesData[user.code] || [true, true, true, true, true];
 
-        // Delete user function
-        function deleteUser(index) {
-            const users = JSON.parse(localStorage.getItem('users'));
-            if (confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
-                users.splice(index, 1);
-                localStorage.setItem('users', JSON.stringify(users));
-                location.reload();  // Reload to update the table
-            }
+            // Toggle the heart's state
+            userLikes[heartIndex] = !userLikes[heartIndex];
+
+            // Save updated likes to localStorage
+            likesData[user.code] = userLikes;
+            localStorage.setItem('likesData', JSON.stringify(likesData));
+
+            // Update the heart's color
+            heart.classList.toggle('black');
         }
 
         // Call the function when the page loads

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>البيانات المسجلة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -84,6 +85,39 @@
         .icon:hover {
             color: red;
         }
+        .present-btn, .absent-btn {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .present-btn {
+            background-color: #28a745;
+        }
+        .absent-btn {
+            background-color: #dc3545;
+        }
+        .present-btn.clicked {
+            background-color: #004d00; /* Darker green */
+        }
+        .absent-btn.clicked {
+            background-color: #7a0000; /* Darker red */
+        }
+        .export-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .export-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -100,15 +134,13 @@
         <!-- Main Content -->
         <div class="content">
             <div class="container">
-                <h2>البيانات المسجلة</h2>
-                <table>
+                <h2>حضور المستخدمين</h2>
+                <table id="attendanceTable">
                     <thead>
                         <tr>
                             <th>الاسم الكامل</th>
-                            <th>العمر</th>
-                            <th>رقم الهاتف</th>
                             <th>رمز الدخول</th>
-                            <th>الإجراءات</th>
+                            <th>الحضور</th>
                         </tr>
                     </thead>
                     <tbody id="userTable">
@@ -135,48 +167,47 @@
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${user.name}</td>
-                        <td>${user.age}</td>
-                        <td>${user.phone}</td>
                         <td>${user.code}</td>
                         <td>
-                            <span class="icon" onclick="editUser(${index})"><i class="fas fa-edit"></i> تعديل</span>
-                            <span class="icon" onclick="deleteUser(${index})"><i class="fas fa-trash-alt"></i> حذف</span>
+                            <button class="present-btn" onclick="markAttendance(${index}, true)">حضور</button>
+                            <button class="absent-btn" onclick="markAttendance(${index}, false)">غياب</button>
                         </td>
                     `;
                     userTable.appendChild(row);
                 });
             } else {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="5" class="text-center">لا توجد بيانات لتعرضها</td>`;
+                row.innerHTML = `<td colspan="3" class="text-center">لا توجد بيانات لتعرضها</td>`;
                 userTable.appendChild(row);
             }
         }
 
-        // Edit user function
-        function editUser(index) {
-            const users = JSON.parse(localStorage.getItem('users'));
-            const user = users[index];
-            const newName = prompt('تعديل الاسم الكامل:', user.name);
-            const newAge = prompt('تعديل العمر:', user.age);
-            const newPhone = prompt('تعديل رقم الهاتف:', user.phone);
+        // Function to mark attendance
+        function markAttendance(index, isPresent) {
+            const presentButton = document.querySelectorAll('.present-btn')[index];
+            const absentButton = document.querySelectorAll('.absent-btn')[index];
 
-            if (newName && newAge && newPhone) {
-                user.name = newName;
-                user.age = newAge;
-                user.phone = newPhone;
-                localStorage.setItem('users', JSON.stringify(users));
-                location.reload();  // Reload to update the table
+            if (isPresent) {
+                presentButton.classList.add('clicked');
+                absentButton.classList.remove('clicked');
+            } else {
+                absentButton.classList.add('clicked');
+                presentButton.classList.remove('clicked');
             }
+
+            // For now, simply log the attendance change
+            console.log(`${JSON.parse(localStorage.getItem('users'))[index].name} - ${isPresent ? 'حضور' : 'غياب'}`);
         }
 
-        // Delete user function
-        function deleteUser(index) {
-            const users = JSON.parse(localStorage.getItem('users'));
-            if (confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
-                users.splice(index, 1);
-                localStorage.setItem('users', JSON.stringify(users));
-                location.reload();  // Reload to update the table
-            }
+        // Function to export the table as an image
+        function exportTableAsImage() {
+            const table = document.getElementById('attendanceTable');
+            html2canvas(table).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'attendance_table.png';
+                link.click();
+            });
         }
 
         // Call the function when the page loads

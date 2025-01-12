@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .dashboard {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #1F1E24;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: block;
+            margin-left: 1rem;
+        }
+        .sidebar a:hover {
+            background-color: #33323C;
+        }
+        .content {
+            flex: 1;
+            background-color: #ecf0f1;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <a href="admin.html"><h2>Admin Dashboard</h2></a>
+            <a href="data.html">المستكشفين</a>
+            <a href="atte.html">الحضور</a>
+            <a href="hearts.html">القلوب</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+
+        </div>
+    </div>
+
+</body>
+</html>
