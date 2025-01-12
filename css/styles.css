@@ -643,7 +643,8 @@ input[type='checkbox'] {
 }
 
 .navbar-custom .navbar-brand.logo-image img {
-    width: 20%;
+    width: 90%;
+	margin-right: -25rem;
 }
 
 .navbar-custom .navbar-brand.logo-text {
@@ -662,6 +663,7 @@ input[type='checkbox'] {
 	color: #333;
 	text-decoration: none;
 	transition: all 0.2s ease;
+	
 }
 
 .navbar-custom .nav-item .nav-link:hover,
@@ -884,11 +886,16 @@ input[type='checkbox'] {
 	padding-top: 6rem;
 	padding-bottom: 6.25rem;
 	background-color: #2A2A23;
+	direction: rtl;
 }
 
 .form-1 h2 {
 	margin-bottom: 1.25rem;
 	color: white;
+	text-align: right;
+	margin-top: -2rem;
+
+
 
 }
 
@@ -898,6 +905,8 @@ input[type='checkbox'] {
 .form-1 .checkbox,
 .form-1 .checkbox a {
 	color: #ffffff;
+	text-align: right;
+
 }
 
 .form-1 p {
@@ -969,11 +978,13 @@ input[type='checkbox'] {
 	padding-bottom: 3.5rem;
 	background: #545446;
 	color: white;
+	text-align: right;
 }
 
 .basic-1 h2 {
 	margin-bottom: 1.25rem;
 	color: white;
+	margin-right: 4rem;
 }
 
 .basic-1 img {
@@ -996,12 +1007,14 @@ input[type='checkbox'] {
 	padding-top: 3.5rem;
 	padding-bottom: 2.75rem;
 	background-color: #2A2A23;
+	text-align: center;
 }
 
 .basic-2 h2 {
 	margin-bottom: 3.75rem;
 	text-align: center;
 	color: #ffffff;
+
 }
 .basic-2 h4, p{
 	color: white;
@@ -1033,6 +1046,7 @@ input[type='checkbox'] {
 	padding-top: 2.75rem;
 	padding-bottom: 4rem;
 	background-color: #2A2A23;
+	text-align: right;
 }
 
 .basic-3 .text-container {
@@ -1067,7 +1081,7 @@ input[type='checkbox'] {
 	padding: 2rem 1.5rem 2rem 1.5rem;
 	border-radius: 0.25rem;
 	background-color: #2A2A23;
-	text-align: left;
+	text-align: right;
 }
 
 .lightbox-basic .container {
@@ -1109,12 +1123,16 @@ input[type='checkbox'] {
 }
 .lightbox-basic h3, h5, p, li{
 	color: white;
+	list-style: none;
+
+	
 }
 
 .lightbox-basic .list-unstyled .fas {
 	color: #ffffff;
 	font-size: 0.5rem;
 	line-height: 1.5rem;
+	list-style: none;
 }
 
 .lightbox-basic .list-unstyled .media-body {
@@ -1640,12 +1658,12 @@ a.back-to-top {
 	background: #ffbd50 url("../images/up-arrow.png") no-repeat center 47%;
 	background-size: 1.125rem 1.125rem;
 	text-indent: -9999px;
+	
 }
 
 a:hover.back-to-top {
 	background-color: #f0a731; 
 }
-
 
 /***************************/
 /*     20. Extra Pages     */
